@@ -60,6 +60,7 @@ class App extends Component {
         result: ''
       })
     }
+    this.refs.reactAceEditor.editor.resize()
   }
 
   render() {
@@ -99,13 +100,14 @@ class App extends Component {
         >
           <div
             className="container"
-            style={{ flexGrow: 1, paddingBottom: '1em', height: '1%' }}
+            style={{ display: 'flex', flex: 1, paddingBottom: '1em' }}
           >
             <AceEditor
-              name="EDITOR"
-              theme="xcode"
+              ref="reactAceEditor"
               height="100%"
               width="100%"
+              name="EDITOR"
+              theme="xcode"
               mode="javascript"
               value={this.state.editorValue}
               defaultValue={this.state.editorValue}
@@ -114,7 +116,7 @@ class App extends Component {
               showPrintMargin={false}
               enableBasicAutocompletion={true}
               enableLiveAutocompletion={true}
-              editorProps={{ $blockScrolling: true }}
+              editorProps={{ $blockScrolling: Infinity }}
               onChange={this.update}
               commands={[
                 {
@@ -128,7 +130,7 @@ class App extends Component {
           {this.state.result ? (
             <div
               className="container"
-              style={{ maxHeight: '50%', overflow: 'auto' }}
+              style={{ maxHeight: '200px', overflow: 'auto' }}
             >
               <pre>
                 <code style={{ overflow: 'auto' }}>{this.state.result}</code>
@@ -139,7 +141,7 @@ class App extends Component {
           {this.state.error ? (
             <div
               className="container"
-              style={{ maxHeight: '50%', overflow: 'auto' }}
+              style={{ maxHeight: '200px', overflow: 'auto' }}
             >
               <pre>
                 <code style={{ color: '#f92c59', overflow: 'auto' }}>
@@ -163,7 +165,7 @@ class App extends Component {
               </button>
             </div>
             <a
-              href="https://github.com/rametta"
+              href="https://github.com/rametta/sanctuary-sandbox"
               style={{
                 textDecoration: 'none',
                 color: 'gray'
