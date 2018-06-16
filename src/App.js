@@ -14,6 +14,29 @@ class App extends Component {
       result: '',
       error: ''
     }
+    this.update = this.update.bind(this)
+  }
+
+  componentDidMount() {
+    const uri = window.location.href
+    const index = uri.indexOf('?script=')
+    if (index > -1) {
+      const script = decodeURIComponent(uri.substr(index + 8))
+      if (script) {
+        this.setState({ editorValue: script })
+      }
+    }
+  }
+
+  update(editorValue) {
+    this.setState({ editorValue })
+    const str = encodeURIComponent(editorValue)
+    if (window.history.pushState) {
+      const uri = `${window.location.protocol}//${window.location.host}${
+        window.location.pathname
+      }?script=${str}`
+      window.history.pushState({ path: uri }, '', uri)
+    }
   }
 
   execute() {
@@ -26,9 +49,10 @@ class App extends Component {
         return eval(`const S = this.S; ${this.code}`)
       }
       const result = evalInContext.call({ S, code: this.state.editorValue })
-      this.setState({ result: result.toString(), error: '' })
+      if (result) {
+        this.setState({ result: result.toString(), error: '' })
+      }
     } catch (e) {
-      console.error(e)
       this.setState({
         error: `Line ${e.lineNumber} - ${e.toString()}`,
         result: ''
@@ -89,7 +113,7 @@ class App extends Component {
               enableBasicAutocompletion={true}
               enableLiveAutocompletion={true}
               editorProps={{ $blockScrolling: true }}
-              onChange={(value) => this.setState({ editorValue: value })}
+              onChange={this.update}
               commands={[
                 {
                   name: 'runScript',
@@ -100,7 +124,10 @@ class App extends Component {
             />
           </div>
           {this.state.result ? (
-            <div className="container">
+            <div
+              className="container"
+              style={{ maxHeight: '50%', overflow: 'auto' }}
+            >
               <pre>
                 <code style={{ overflow: 'auto' }}>{this.state.result}</code>
               </pre>
@@ -108,7 +135,10 @@ class App extends Component {
           ) : null}
 
           {this.state.error ? (
-            <div className="container">
+            <div
+              className="container"
+              style={{ maxHeight: '50%', overflow: 'auto' }}
+            >
               <pre>
                 <code style={{ color: '#f92c59', overflow: 'auto' }}>
                   {this.state.error}
@@ -126,7 +156,9 @@ class App extends Component {
             }}
           >
             <div>
-              <kbd>CTRL+ENTER</kbd> to run
+              <button className="btn" onClick={() => this.execute()}>
+                Run (Ctrl+Enter)
+              </button>
             </div>
             <a
               href="https://github.com/rametta"
