@@ -55,10 +55,17 @@ class App extends Component {
         this.setState({ result: result.toString(), error: '' })
       }
     } catch (e) {
-      this.setState({
-        error: `Line ${e.lineNumber} - ${e.toString()}`,
-        result: ''
-      })
+      if (e.lineNumber) {
+        this.setState({
+          error: `Line ${e.lineNumber} - ${e.toString()}`,
+          result: ''
+        })
+      } else {
+        this.setState({
+          error: `${e.toString()}`,
+          result: ''
+        })
+      }
     }
     this.refs.reactAceEditor.editor.resize()
   }

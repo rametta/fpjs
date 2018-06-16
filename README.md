@@ -21,16 +21,40 @@ const request = {
   body: { address: 'I AM ADDRESS' }
 }
 
+// hasQuery :: HttpRequest -> Either
+const hasQuery = (req) => req.query 
+  ? Right(req) 
+  : Left({ code: 418, msg: 'Missing query' })
+  
+// hasBody :: HttpRequest -> Either
+const hasBody = (req) => req.body 
+  ? Right(req) 
+  : Left({ code: 418, msg: 'Missing body' })
+
 // hasUid :: HttpRequest -> Either
-const hasUid = (req) =>
-  req.query.uid ? Right(req) : Left({ code: 418, msg: 'Missing UID' })
+const hasUid = (req) => req.query.uid 
+  ? Right(req) 
+  : Left({ code: 418, msg: 'Missing UID' })
 
 // hasAddress :: HttpRequest -> Either
-const hasAddress = (req) =>
-  req.body.address ? Right(req) : Left({ code: 418, msg: 'Missing Address' })
+const hasAddress = (req) => req.body.address
+  ? Right(req)
+  : Left({ code: 418, msg: 'Missing Address' })
+
+// chain1 :: HttpRequest -> Either
+const chain1 = (req) => chain (hasQuery) (hasBody (req))
+
+// chain2 :: Either -> Either
+const chain2 = (prevEither) => chain (hasUid) (prevEither)
+
+// chain3 :: Either -> Either
+const chain3 = (prevEither) => chain (hasAddress) (prevEither)
+
+// compose1 :: HttpRequest -> Either
+const compose1 = (req) => compose (chain2) (chain1) (req)
 
 // validate :: HttpRequest -> Either
-const validate = (req) => chain(hasAddress)(hasUid(req))
+const validate = (req) => compose (chain3) (compose1) (req)
 
 // validatePass :: HttpRequest -> String
 const validatePass = (req) => req.query.uid
