@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import S from 'sanctuary'
+import { create, env } from 'sanctuary'
 import './App.css'
 import AceEditor from 'react-ace'
 import 'brace/mode/javascript'
 import 'brace/theme/xcode'
 import 'brace/ext/language_tools'
+
+const S = create({ checkTypes: true, env })
 
 class App extends Component {
   constructor(props) {
@@ -97,7 +99,7 @@ class App extends Component {
         >
           <div
             className="container"
-            style={{ flexGrow: 1, paddingBottom: '1em' }}
+            style={{ flexGrow: 1, paddingBottom: '1em', height: '1%' }}
           >
             <AceEditor
               name="EDITOR"
