@@ -5,8 +5,56 @@ import AceEditor from 'react-ace'
 import 'brace/mode/javascript'
 import 'brace/theme/xcode'
 import 'brace/ext/language_tools'
-
 const S = create({ checkTypes: true, env })
+const { encaseEither, either, Left, Right, chain, I } = S
+
+// shouldExecute :: String -> Either
+const shouldExecute = (code) =>
+  code ? Right(code) : Left('🥛 Empty: type something in...')
+
+// hasResult :: Result -> Either
+const hasResult = (result) =>
+  result ? Right(result.toString()) : Left('💥 Try again...')
+
+// tryEval :: String -> Either
+const tryEval = (code) => encaseEither(errMsg)(withContext)(code)
+
+// validateResult :: String -> Either
+const validateResult = (code) => chain(hasResult)(tryEval(code))
+
+// validateCode :: String -> Either
+const validateCode = (code) => chain(validateResult)(shouldExecute(code))
+
+// canPush :: String -> Either
+const canPush = (script) => {
+  const { protocol, host, pathname } = window.location
+  return window.history.pushState
+    ? Right(`${protocol}//${host}${pathname}?script=${script}`)
+    : Left(I)
+}
+
+// hasScript :: String -> Either
+const hasScript = (script) => (script ? Right(script) : Left(I))
+
+// valid :: Number -> String -> Either
+const valid = (index) => (href) =>
+  index > -1 ? Right(decodeURIComponent(href.substr(index + 8))) : Left(I)
+
+// validateUri :: Number -> String -> Either
+const validateUri = (index) => (href) => chain(hasScript)(valid(index)(href))
+
+// withContext :: String -> Throwable String
+const withContext = (code) => evalInContext.call({ S, code })
+
+// evalInContext :: String
+function evalInContext() {
+  // eslint-disable-next-line
+  return eval(`const S = this.S; ${this.code}`)
+}
+
+// errMsg :: Error -> String
+const errMsg = (e) =>
+  e.lineNumber ? `Line ${e.lineNumber} - ${e.toString()}` : e.toString()
 
 class App extends Component {
   constructor(props) {
@@ -20,95 +68,60 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const uri = window.location.href
-    const index = uri.indexOf('?script=')
-    if (index > -1) {
-      const script = decodeURIComponent(uri.substr(index + 8))
-      if (script) {
-        this.setState({ editorValue: script })
-      }
-    }
+    const { href } = window.location
+    const index = href.indexOf('?script=')
+    either(I)((v) => this.setState({ editorValue: v }))(
+      validateUri(index)(href)
+    )
   }
 
   update(editorValue) {
     this.setState({ editorValue })
-    const str = encodeURIComponent(editorValue)
-    if (window.history.pushState) {
-      const uri = `${window.location.protocol}//${window.location.host}${
-        window.location.pathname
-      }?script=${str}`
-      window.history.pushState({ path: uri }, '', uri)
-    }
+    const script = encodeURIComponent(editorValue)
+    either(I)((uri) => window.history.pushState({ path: uri }, '', uri))(
+      canPush(script)
+    )
+  }
+
+  error(error) {
+    this.setState({ result: '', error })
+  }
+
+  result(result) {
+    this.setState({ result, error: '' })
   }
 
   execute() {
-    if (!this.state.editorValue) {
-      return
-    }
-    try {
-      function evalInContext() {
-        // eslint-disable-next-line
-        return eval(`const S = this.S; ${this.code}`)
-      }
-      const result = evalInContext.call({ S, code: this.state.editorValue })
-      if (result) {
-        this.setState({ result: result.toString(), error: '' })
-      }
-    } catch (e) {
-      if (e.lineNumber) {
-        this.setState({
-          error: `Line ${e.lineNumber} - ${e.toString()}`,
-          result: ''
-        })
-      } else {
-        this.setState({
-          error: `${e.toString()}`,
-          result: ''
-        })
-      }
-    }
+    const { editorValue } = this.state
+    either((e) => this.error(e))((r) => this.result(r))(
+      validateCode(editorValue)
+    )
     this.refs.reactAceEditor.editor.resize()
   }
 
   render() {
     return (
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <header className="container">
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'baseline',
-              justifyContent: 'space-between'
-            }}
-          >
-            <h1>
-              <span role="img" aria-label="palm emoji">
-                🌴
-              </span>{' '}
-              Sanctuary Sandbox
-            </h1>
-            <small>
-              <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href="https://sanctuary.js.org"
-                style={{
-                  textDecoration: 'none',
-                  color: 'gray'
-                }}
-              >
-                Docs
-              </a>
-            </small>
-          </div>
+      <div className="app-page">
+        <header className="container header">
+          <h1>
+            <span role="img" aria-label="palm emoji">
+              🌴
+            </span>{' '}
+            Sanctuary Sandbox
+          </h1>
+          <small>
+            <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://github.com/sanctuary-js/sanctuary"
+              className="link"
+            >
+              Docs
+            </a>
+          </small>
         </header>
-        <div
-          style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-        >
-          <div
-            className="container"
-            style={{ display: 'flex', flex: 1, paddingBottom: '1em' }}
-          >
+        <div className="content">
+          <div className="container ace-parent">
             <AceEditor
               ref="reactAceEditor"
               height="100%"
@@ -135,52 +148,32 @@ class App extends Component {
             />
           </div>
           {this.state.result ? (
-            <div
-              className="container"
-              style={{ maxHeight: '200px', overflow: 'auto' }}
-            >
+            <div className="container result-box">
               <pre>
-                <code style={{ overflow: 'auto' }}>{this.state.result}</code>
+                <code className="overflow">{this.state.result}</code>
               </pre>
             </div>
           ) : null}
 
           {this.state.error ? (
-            <div
-              className="container"
-              style={{ maxHeight: '200px', overflow: 'auto' }}
-            >
+            <div className="container result-box">
               <pre>
-                <code style={{ color: '#f92c59', overflow: 'auto' }}>
-                  {this.state.error}
-                </code>
+                <code className="red overflow">{this.state.error}</code>
               </pre>
             </div>
           ) : null}
 
-          <div
-            className="container"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              color: 'gray'
-            }}
-          >
-            <div>
-              <button className="btn" onClick={() => this.execute()}>
-                Run (Ctrl+Enter)
-              </button>
-            </div>
+          <footer className="container footer">
+            <button className="btn" onClick={() => this.execute()}>
+              Run (Ctrl+Enter)
+            </button>
             <a
               href="https://github.com/rametta/sanctuary-sandbox"
-              style={{
-                textDecoration: 'none',
-                color: 'gray'
-              }}
+              className="link"
             >
               Made by Jason
             </a>
-          </div>
+          </footer>
         </div>
       </div>
     )
