@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { create, env } from 'sanctuary'
 import './App.css'
-import AceEditor from 'react-ace'
-import 'brace/mode/javascript'
-import 'brace/theme/xcode'
-import 'brace/ext/language_tools'
+import { Header, Footer, Result, Error, Editor } from './components'
 const S = create({ checkTypes: true, env })
 const { encaseEither, either, Left, Right, chain, I } = S
 
@@ -96,84 +93,21 @@ class App extends Component {
     either((e) => this.error(e))((r) => this.result(r))(
       validateCode(editorValue)
     )
-    this.refs.reactAceEditor.editor.resize()
   }
 
   render() {
     return (
       <div className="app-page">
-        <header className="container header">
-          <h1>
-            <span role="img" aria-label="palm emoji">
-              🌴
-            </span>{' '}
-            Sanctuary Sandbox
-          </h1>
-          <small>
-            <a
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://github.com/sanctuary-js/sanctuary"
-              className="link"
-            >
-              Docs
-            </a>
-          </small>
-        </header>
+        <Header />
         <div className="content">
-          <div className="container ace-parent">
-            <AceEditor
-              ref="reactAceEditor"
-              height="100%"
-              width="100%"
-              name="EDITOR"
-              theme="xcode"
-              mode="javascript"
-              value={this.state.editorValue}
-              defaultValue={this.state.editorValue}
-              tabSize={2}
-              fontSize={20}
-              showPrintMargin={false}
-              enableBasicAutocompletion={true}
-              enableLiveAutocompletion={true}
-              editorProps={{ $blockScrolling: Infinity }}
-              onChange={this.update}
-              commands={[
-                {
-                  name: 'runScript',
-                  bindKey: { win: 'Ctrl-Enter', mac: 'Ctrl-Enter' },
-                  exec: () => this.execute()
-                }
-              ]}
-            />
-          </div>
-          {this.state.result ? (
-            <div className="container result-box">
-              <pre>
-                <code className="overflow">{this.state.result}</code>
-              </pre>
-            </div>
-          ) : null}
-
-          {this.state.error ? (
-            <div className="container result-box">
-              <pre>
-                <code className="red overflow">{this.state.error}</code>
-              </pre>
-            </div>
-          ) : null}
-
-          <footer className="container footer">
-            <button className="btn" onClick={() => this.execute()}>
-              Run (Ctrl+Enter)
-            </button>
-            <a
-              href="https://github.com/rametta/sanctuary-sandbox"
-              className="link"
-            >
-              Made by Jason
-            </a>
-          </footer>
+          <Editor
+            exec={() => this.execute()}
+            onChange={this.update}
+            value={this.state.editorValue}
+          />
+          {this.state.result ? <Result result={this.state.result} /> : null}
+          {this.state.error ? <Error error={this.state.error} /> : null}
+          <Footer execute={() => this.execute()} />
         </div>
       </div>
     )
