@@ -5,16 +5,6 @@ import 'brace/theme/xcode'
 import 'brace/ext/language_tools'
 
 export class Editor extends Component {
-  constructor(props) {
-    super(props)
-    this.execute = this.execute.bind(this)
-  }
-
-  execute() {
-    this.props.exec()
-    this.refs.reactAceEditor.editor.resize()
-  }
-
   render() {
     return (
       <div className="container ace-parent">
@@ -38,7 +28,7 @@ export class Editor extends Component {
             {
               name: 'runScript',
               bindKey: { win: 'Ctrl-Enter', mac: 'Ctrl-Enter' },
-              exec: () => this.execute()
+              exec: () => this.props.exec()
             }
           ]}
         />

@@ -93,6 +93,7 @@ class App extends Component {
     either((e) => this.error(e))((r) => this.result(r))(
       validateCode(editorValue)
     )
+    this.refs.editor.refs.reactAceEditor.editor.resize()
   }
 
   render() {
@@ -101,6 +102,7 @@ class App extends Component {
         <Header />
         <div className="content">
           <Editor
+            ref="editor"
             exec={() => this.execute()}
             onChange={this.update}
             value={this.state.editorValue}
