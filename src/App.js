@@ -6,42 +6,37 @@ const S = create({ checkTypes: true, env })
 const { encaseEither, either, Left, Right, chain, I } = S
 
 // shouldExecute :: String -> Either
-const shouldExecute = (code) =>
-  code ? Right(code) : Left('🥛 Empty: type something in...')
+const shouldExecute = code => (code ? Right(code) : Left('🥛 Empty: type something in...'))
 
 // hasResult :: Result -> Either
-const hasResult = (result) =>
-  result ? Right(result.toString()) : Left('💥 Try again...')
+const hasResult = result => (result ? Right(result.toString()) : Left('💥 Try again...'))
 
 // tryEval :: String -> Either
-const tryEval = (code) => encaseEither(errMsg)(withContext)(code)
+const tryEval = code => encaseEither(errMsg)(withContext)(code)
 
 // validateResult :: String -> Either
-const validateResult = (code) => chain(hasResult)(tryEval(code))
+const validateResult = code => chain(hasResult)(tryEval(code))
 
 // validateCode :: String -> Either
-const validateCode = (code) => chain(validateResult)(shouldExecute(code))
+const validateCode = code => chain(validateResult)(shouldExecute(code))
 
 // canPush :: String -> Either
-const canPush = (script) => {
+const canPush = script => {
   const { protocol, host, pathname } = window.location
-  return window.history.pushState
-    ? Right(`${protocol}//${host}${pathname}?script=${script}`)
-    : Left(I)
+  return window.history.pushState ? Right(`${protocol}//${host}${pathname}?script=${script}`) : Left(I)
 }
 
 // hasScript :: String -> Either
-const hasScript = (script) => (script ? Right(script) : Left(I))
+const hasScript = script => (script ? Right(script) : Left(I))
 
 // valid :: Number -> String -> Either
-const valid = (index) => (href) =>
-  index > -1 ? Right(decodeURIComponent(href.substr(index + 8))) : Left(I)
+const valid = index => href => (index > -1 ? Right(decodeURIComponent(href.substr(index + 8))) : Left(I))
 
 // validateUri :: Number -> String -> Either
-const validateUri = (index) => (href) => chain(hasScript)(valid(index)(href))
+const validateUri = index => href => chain(hasScript)(valid(index)(href))
 
 // withContext :: String -> Throwable String
-const withContext = (code) => evalInContext.call({ S, code })
+const withContext = code => evalInContext.call({ S, code })
 
 // evalInContext :: String
 function evalInContext() {
@@ -50,8 +45,7 @@ function evalInContext() {
 }
 
 // errMsg :: Error -> String
-const errMsg = (e) =>
-  e.lineNumber ? `Line ${e.lineNumber} - ${e.toString()}` : e.toString()
+const errMsg = e => (e.lineNumber ? `Line ${e.lineNumber} - ${e.toString()}` : e.toString())
 
 class App extends Component {
   constructor(props) {
@@ -59,7 +53,7 @@ class App extends Component {
     this.state = {
       editorValue: 'S.compose (Math.sqrt) (S.add (1)) (8)',
       result: '',
-      error: ''
+      error: '',
     }
     this.update = this.update.bind(this)
   }
@@ -67,17 +61,13 @@ class App extends Component {
   componentDidMount() {
     const { href } = window.location
     const index = href.indexOf('?script=')
-    either(I)((v) => this.setState({ editorValue: v }))(
-      validateUri(index)(href)
-    )
+    either(I)(v => this.setState({ editorValue: v }))(validateUri(index)(href))
   }
 
   update(editorValue) {
     this.setState({ editorValue })
     const script = encodeURIComponent(editorValue)
-    either(I)((uri) => window.history.pushState({ path: uri }, '', uri))(
-      canPush(script)
-    )
+    either(I)(uri => window.history.pushState({ path: uri }, '', uri))(canPush(script))
   }
 
   error(error) {
@@ -90,10 +80,8 @@ class App extends Component {
 
   execute() {
     const { editorValue } = this.state
-    either((e) => this.error(e))((r) => this.result(r))(
-      validateCode(editorValue)
-    )
-    this.refs.editor.refs.reactAceEditor.editor.resize()
+    either(e => this.error(e))(r => this.result(r))(validateCode(editorValue))
+    setTimeout(() => this.editor.reactAceEditor.editor.resize(), 200)
   }
 
   render() {
@@ -102,7 +90,7 @@ class App extends Component {
         <Header />
         <div className="content">
           <Editor
-            ref="editor"
+            ref={c => (this.editor = c)}
             exec={() => this.execute()}
             onChange={this.update}
             value={this.state.editorValue}

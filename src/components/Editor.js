@@ -9,7 +9,7 @@ export class Editor extends Component {
     return (
       <div className="container ace-parent">
         <AceEditor
-          ref="reactAceEditor"
+          ref={c => (this.reactAceEditor = c)}
           height="100%"
           width="100%"
           name="EDITOR"
@@ -28,8 +28,8 @@ export class Editor extends Component {
             {
               name: 'runScript',
               bindKey: { win: 'Ctrl-Enter', mac: 'Ctrl-Enter' },
-              exec: () => this.props.exec()
-            }
+              exec: () => this.props.exec(),
+            },
           ]}
         />
       </div>
