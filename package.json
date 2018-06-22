@@ -5,6 +5,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "partial.lenses": "^13.13.2",
+    "ramda": "^0.25.0",
     "react": "^16.4.1",
     "react-ace": "^6.1.1",
     "react-dom": "^16.4.1",

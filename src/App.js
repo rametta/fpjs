@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { create, env } from 'sanctuary'
 import './App.css'
+import * as L from 'partial.lenses'
+import * as R from 'ramda'
 import { Header, Footer, Result, Error, Editor } from './components'
 const S = create({ checkTypes: true, env })
 const { encaseEither, either, Left, Right, chain, I } = S
@@ -36,12 +38,17 @@ const valid = index => href => (index > -1 ? Right(decodeURIComponent(href.subst
 const validateUri = index => href => chain(hasScript)(valid(index)(href))
 
 // withContext :: String -> Throwable String
-const withContext = code => evalInContext.call({ S, code })
+const withContext = code => evalInContext.call({ S, L, R, code })
 
 // evalInContext :: String
 function evalInContext() {
   // eslint-disable-next-line
-  return eval(`const S = this.S; ${this.code}`)
+  return eval(`
+    const S = this.S;
+    const L = this.L;
+    const R = this.R;
+    ${this.code}
+  `)
 }
 
 // errMsg :: Error -> String
