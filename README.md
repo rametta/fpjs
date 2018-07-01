@@ -1,5 +1,8 @@
 # Sanctuary Sandbox
 
+## How to
+This app is a sandbox for playing with `Sanctuary`, `Daggy`, `Partial.Lense`, and `Ramda`
+
 ## Examples
 
 ### Maybe

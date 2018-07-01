@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "daggy": "^1.2.0",
     "partial.lenses": "^13.13.2",
     "ramda": "^0.25.0",
     "react": "^16.4.1",

@@ -3,15 +3,38 @@ import { create, env } from 'sanctuary'
 import './App.css'
 import * as L from 'partial.lenses'
 import * as R from 'ramda'
+import daggy from 'daggy'
 import { Header, Footer, Result, Error, Editor } from './components'
 const S = create({ checkTypes: true, env })
 const { encaseEither, either, Left, Right, chain, I } = S
 
-// shouldExecute :: String -> Either
-const shouldExecute = code => (code ? Right(code) : Left('🥛 Empty: type something in...'))
+// isEmpty :: String -> Either
+const isEmpty = code => code
+  ? Right(code)
+  : Left('🥛 Empty: type something in...')
 
 // hasResult :: Result -> Either
-const hasResult = result => (result ? Right(result.toString()) : Left('💥 Try again...'))
+const hasResult = result => result 
+  ? Right(result.toString())
+  : Left('💥 Try again...')
+
+// canPush :: String -> Either
+const canPush = script => {
+  const { protocol, host, pathname } = window.location
+  return window.history.pushState 
+    ? Right(`${protocol}//${host}${pathname}?script=${script}`)
+    : Left(I)
+}
+
+// hasScript :: String -> Either
+const hasScript = script => script
+  ? Right(script)
+  : Left(I)
+
+// valid :: Number -> String -> Either
+const valid = index => href => index > -1 
+  ? Right(decodeURIComponent(href.substr(index + 8)))
+  : Left(I)
 
 // tryEval :: String -> Either
 const tryEval = code => encaseEither(errMsg)(withContext)(code)
@@ -20,25 +43,13 @@ const tryEval = code => encaseEither(errMsg)(withContext)(code)
 const validateResult = code => chain(hasResult)(tryEval(code))
 
 // validateCode :: String -> Either
-const validateCode = code => chain(validateResult)(shouldExecute(code))
-
-// canPush :: String -> Either
-const canPush = script => {
-  const { protocol, host, pathname } = window.location
-  return window.history.pushState ? Right(`${protocol}//${host}${pathname}?script=${script}`) : Left(I)
-}
-
-// hasScript :: String -> Either
-const hasScript = script => (script ? Right(script) : Left(I))
-
-// valid :: Number -> String -> Either
-const valid = index => href => (index > -1 ? Right(decodeURIComponent(href.substr(index + 8))) : Left(I))
+const validateCode = code => chain(validateResult)(isEmpty(code))
 
 // validateUri :: Number -> String -> Either
 const validateUri = index => href => chain(hasScript)(valid(index)(href))
 
 // withContext :: String -> Throwable String
-const withContext = code => evalInContext.call({ S, L, R, code })
+const withContext = code => evalInContext.call({ S, L, R, daggy, code })
 
 // evalInContext :: String
 function evalInContext() {
@@ -47,6 +58,7 @@ function evalInContext() {
     const S = this.S;
     const L = this.L;
     const R = this.R;
+    const daggy = this.daggy;
     ${this.code}
   `)
 }
