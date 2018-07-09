@@ -6,17 +6,37 @@ import * as R from 'ramda'
 import daggy from 'daggy'
 import { Header, Footer, Result, Error, Editor } from './components'
 const S = create({ checkTypes: true, env })
-const { encaseEither, either, Left, Right, chain, I } = S
+const { encaseEither, either, Left, Right, chain, I, pipeK, compose } = S
 
 // isEmpty :: String -> Either
 const isEmpty = code => code
   ? Right(code)
   : Left('🥛 Empty: type something in...')
 
+// isObject :: Result -> Either
+const isObject = result => result !== null && typeof result === 'object'
+  ? Right (JSON.stringify(result, null, 2))
+  : Right (result)
+
+// isBool :: Result -> Either
+const isBool = result => typeof result === 'boolean'
+  ? Right (JSON.stringify(result))
+  : Right (result)
+
+// isFunction :: Result -> Either
+const isFunction = result => typeof result === 'function'
+  ? Right (result.toString())
+  : Right (result)
+
+// isArray :: Result -> Either
+const isArray = result => result.constructor === Array
+  ? Right (JSON.stringify(result))
+  : Right (result)
+
 // hasResult :: Result -> Either
 const hasResult = result => result 
-  ? Right(result.toString())
-  : Left('💥 Try again...')
+  ? Right(result)
+  : Left('🌌 VOID')
 
 // canPush :: String -> Either
 const canPush = script => {
@@ -36,20 +56,29 @@ const valid = index => href => index > -1
   ? Right(decodeURIComponent(href.substr(index + 8)))
   : Left(I)
 
-// tryEval :: String -> Either
-const tryEval = code => encaseEither(errMsg)(withContext)(code)
-
-// validateResult :: String -> Either
-const validateResult = code => chain(hasResult)(tryEval(code))
-
-// validateCode :: String -> Either
-const validateCode = code => chain(validateResult)(isEmpty(code))
-
-// validateUri :: Number -> String -> Either
-const validateUri = index => href => chain(hasScript)(valid(index)(href))
+// errMsg :: Error -> String
+const errMsg = e => (e.lineNumber ? `Line ${e.lineNumber} - ${e.toString()}` : e.toString())
 
 // withContext :: String -> Throwable String
 const withContext = code => evalInContext.call({ S, L, R, daggy, code })
+
+// tryEval :: String -> Either
+const tryEval = encaseEither (errMsg) (withContext)
+
+const run = compose (
+  pipeK ([
+    isEmpty,
+    tryEval,
+    isBool,
+    hasResult,
+    isArray,
+    isFunction,
+    isObject,
+  ])
+) (Right)
+
+// validateUri :: Number -> String -> Either
+const validateUri = index => href => chain(hasScript)(valid(index)(href))
 
 // evalInContext :: String
 function evalInContext() {
@@ -62,9 +91,6 @@ function evalInContext() {
     ${this.code}
   `)
 }
-
-// errMsg :: Error -> String
-const errMsg = e => (e.lineNumber ? `Line ${e.lineNumber} - ${e.toString()}` : e.toString())
 
 class App extends Component {
   constructor(props) {
@@ -99,7 +125,7 @@ class App extends Component {
 
   execute() {
     const { editorValue } = this.state
-    either(e => this.error(e))(r => this.result(r))(validateCode(editorValue))
+    either(e => this.error(e))(r => this.result(r))(run(editorValue))
     setTimeout(() => this.editor.reactAceEditor.editor.resize(), 200)
   }
 

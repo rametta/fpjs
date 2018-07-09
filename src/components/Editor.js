@@ -30,6 +30,11 @@ export class Editor extends Component {
               bindKey: { win: 'Ctrl-Enter', mac: 'Ctrl-Enter' },
               exec: () => this.props.exec(),
             },
+            {
+              name: 'runScript2',
+              bindKey: { mac: 'Command-Enter' },
+              exec: () => this.props.exec(),
+            },
           ]}
         />
       </div>
