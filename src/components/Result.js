@@ -1,9 +1,19 @@
 import React from 'react'
+import styled from 'styled-components'
+
+const Code = styled.code`
+  overflow: auto;
+`
+
+const ResultContainer = styled.div`
+  max-height: 200px;
+  overflow: auto;
+`
 
 export const Result = ({ result }) => (
-  <div className="container result-box">
+  <ResultContainer className="container">
     <pre>
-      <code className="overflow">{result}</code>
+      <Code>{result}</Code>
     </pre>
-  </div>
+  </ResultContainer>
 )

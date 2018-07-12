@@ -1,15 +1,22 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import AceEditor from 'react-ace'
 import 'brace/mode/javascript'
 import 'brace/theme/xcode'
 import 'brace/ext/language_tools'
 
+const AceContainer = styled.div`
+  display: flex;
+  flex: 1;
+  padding-bottom: 1em;
+`
+
 export class Editor extends Component {
   render() {
     return (
-      <div className="container ace-parent">
+      <AceContainer className="container">
         <AceEditor
-          ref={c => (this.reactAceEditor = c)}
+          ref={(c) => (this.reactAceEditor = c)}
           height="100%"
           width="100%"
           name="EDITOR"
@@ -28,16 +35,16 @@ export class Editor extends Component {
             {
               name: 'runScript',
               bindKey: { win: 'Ctrl-Enter', mac: 'Ctrl-Enter' },
-              exec: () => this.props.exec(),
+              exec: () => this.props.exec()
             },
             {
               name: 'runScript2',
               bindKey: { mac: 'Command-Enter' },
-              exec: () => this.props.exec(),
-            },
+              exec: () => this.props.exec()
+            }
           ]}
         />
-      </div>
+      </AceContainer>
     )
   }
 }
