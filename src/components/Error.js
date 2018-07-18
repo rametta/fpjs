@@ -11,10 +11,10 @@ const ErrorContainer = styled.div`
   overflow: auto;
 `
 
-export const Error = ({ error }) => (
+export const Error = ({ msg }) => (
   <ErrorContainer className="container">
     <pre>
-      <Code>{error}</Code>
+      <Code>{msg}</Code>
     </pre>
   </ErrorContainer>
 )

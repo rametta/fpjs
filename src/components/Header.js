@@ -9,6 +9,9 @@ const Link = styled.a`
   margin-right: 7px;
   text-decoration: none;
   color: gray;
+  :hover {
+    animation: zomg 3s infinite;
+  }
 `
 
 const Palm = styled.h1`
@@ -68,6 +71,13 @@ export const Header = () => (
             href="https://ramdajs.com/docs/"
           >
             Ramda
+          </Link>
+          <Link
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://github.com/rametta/sanctuary-sandbox"
+          >
+            Rametta
           </Link>
         </Links>
       </div>
