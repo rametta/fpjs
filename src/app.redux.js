@@ -2,6 +2,7 @@ import * as redux from 'redux'
 import * as L from 'partial.lenses'
 import * as R from 'ramda'
 import daggy from 'daggy'
+import stringify from 'json-stringify'
 import { create, env } from 'sanctuary'
 const S = create({ checkTypes: true, env })
 const { encaseEither, either, Left, Right, pipeK, compose } = S
@@ -32,10 +33,16 @@ export const execute = () => ({ type: types.EXECUTE })
 const isEmpty = (code) =>
   code ? Right(code) : Left('🥛 Empty: type something in...')
 
+// safeStringify :: String -> Either
+const safeStringify = (result) =>
+  encaseEither(() => '🚨 99 problems and your code is all of them')((r) =>
+    stringify(r, null, 2)
+  )(result)
+
 // isObject :: Result -> Either
 const isObject = (result) =>
   result !== null && typeof result === 'object'
-    ? Right(JSON.stringify(result, null, 2))
+    ? safeStringify(result)
     : Right(result)
 
 // isBool :: Result -> Either
@@ -53,16 +60,12 @@ const isArray = (result) =>
 // hasResult :: Result -> Either
 const hasResult = (result) => (result ? Right(result) : Left('🌌 VOID'))
 
-// errMsg :: Error -> String
-const errMsg = (e) =>
-  e.lineNumber ? `Line ${e.lineNumber} - ${e.toString()}` : e.toString()
-
 // withContext :: String -> Throwable String
 const withContext = (code) =>
   evalInContext.call({ S, L, R, daggy, redux, code })
 
 // tryEval :: String -> Either
-const tryEval = encaseEither(errMsg)(withContext)
+const tryEval = encaseEither((e) => e.toString())(withContext)
 
 // log :: Result -> Either
 const log = (result) => {
