@@ -80,7 +80,7 @@ class App extends Component {
             Error: (msg) => <Error msg={msg} />,
             Empty: () => null
           })}
-          <Footer />
+          <Footer exec={this.execute.bind(this)} />
         </Content>
       </AppContainer>
     )

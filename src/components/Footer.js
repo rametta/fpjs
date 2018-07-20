@@ -1,9 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import { ToastContainer, toast } from 'react-toastify'
-import { execute } from './../app.redux'
 import 'react-toastify/dist/ReactToastify.css'
 
 const FooterWrapper = styled.footer`
@@ -26,9 +24,9 @@ const share = () => {
     .catch((err) => console.error(err))
 }
 
-const FooterContainer = ({ execute }) => (
+export const Footer = ({ exec }) => (
   <FooterWrapper className="container">
-    <button className="btn" onClick={execute} type="button">
+    <button className="btn" onClick={exec} type="button">
       <span role="img" aria-label="fire emoji">
         🔥
       </span>{' '}
@@ -48,8 +46,3 @@ const FooterContainer = ({ execute }) => (
     ) : null}
   </FooterWrapper>
 )
-
-export const Footer = connect(
-  ({ editor }) => ({ editor }),
-  { execute }
-)(FooterContainer)
