@@ -1,6 +1,7 @@
 {
-  "short_name": "Sanctuary Sandbox",
+  "short_name": "🌴 Sanctuary",
   "name": "Sanctuary Sandbox",
+  "description": "All things FP",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,7 +9,7 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#000000"

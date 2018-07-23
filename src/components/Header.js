@@ -75,6 +75,13 @@ export const Header = () => (
           <Link
             rel="noopener noreferrer"
             target="_blank"
+            href="https://redux.js.org/basics/store"
+          >
+            Redux
+          </Link>
+          <Link
+            rel="noopener noreferrer"
+            target="_blank"
             href="https://github.com/rametta/sanctuary-sandbox"
           >
             Rametta
