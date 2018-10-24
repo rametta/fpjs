@@ -23,7 +23,7 @@ const Code = styled.code`
 `
 
 export const Error = ({ msg }) => (
-  <ErrorContainer className="container">
+  <ErrorContainer className="u-full-width">
     <Pre>
       <Code>{msg}</Code>
     </Pre>

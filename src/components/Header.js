@@ -3,6 +3,9 @@ import styled from 'styled-components'
 
 const Flex = styled.div`
   display: flex;
+  @media (max-width: 700px) {
+    display: none;
+  }
 `
 
 const Link = styled.a`
@@ -34,7 +37,7 @@ const Links = styled.small`
 `
 
 export const Header = () => (
-  <HeaderContainer className="container">
+  <HeaderContainer className="u-full-width">
     <Flex>
       <Palm>
         <span role="img" aria-label="palm emoji">

@@ -22,7 +22,7 @@ const Code = styled.code`
 `
 
 export const Result = ({ result }) => (
-  <ResultContainer className="container">
+  <ResultContainer className="u-full-width">
     <Pre>
       <Code>{result}</Code>
     </Pre>

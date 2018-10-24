@@ -14,7 +14,7 @@ const AceContainer = styled.div`
 export class Editor extends Component {
   render() {
     return (
-      <AceContainer className="container">
+      <AceContainer className="u-full-width">
         <AceEditor
           ref={(c) => (this.reactAceEditor = c)}
           height="100%"

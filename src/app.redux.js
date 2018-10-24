@@ -50,7 +50,7 @@ const isFunction = result => (typeof result === 'function' ? Right(result.toStri
 const isArray = result => (result.constructor === Array ? Right(JSON.stringify(result)) : Right(result))
 
 // hasResult :: Result -> Either
-const hasResult = result => (result ? Right(result) : Left('🌌 VOID'))
+const hasResult = result => (result ? Right(result) : Left(result === undefined ? 'undefined' : result === null ? 'null' : 'VOID'))
 
 // withContext :: String -> Throwable String
 const withContext = code => evalInContext.call({ S, L, R, $, daggy, redux, code })
@@ -59,10 +59,7 @@ const withContext = code => evalInContext.call({ S, L, R, $, daggy, redux, code 
 const tryEval = encaseEither(e => e.toString())(withContext)
 
 // log :: Result -> Either
-const log = result => {
-  console.info(result)
-  return Right(result)
-}
+const log = result => console.info(result) || Right(result)
 
 const run = compose(pipeK([isEmpty, tryEval, log, isBool, hasResult, isArray, isFunction, isObject]))(Right)
 
