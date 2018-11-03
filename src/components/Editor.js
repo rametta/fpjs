@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import AceEditor from 'react-ace'
 import 'brace/mode/javascript'
-import 'brace/theme/xcode'
+import 'brace/theme/dracula'
 import 'brace/ext/language_tools'
 
 const AceContainer = styled.div`
   display: flex;
   flex: 1;
-  padding-bottom: 1em;
 `
 
 export class Editor extends Component {
@@ -20,7 +19,7 @@ export class Editor extends Component {
           height="100%"
           width="100%"
           name="EDITOR"
-          theme="xcode"
+          theme="dracula"
           mode="javascript"
           value={this.props.value}
           defaultValue={this.props.value}

@@ -20,7 +20,7 @@ const types = {
 }
 
 const initial = {
-  editor: 'S.compose (Math.sqrt) (S.add (1)) (8)',
+  editor: `S.compose (Math.sqrt) (S.add (1)) (8)`,
   status: Status.Empty,
 }
 
@@ -31,26 +31,38 @@ export const setEditor = payload => ({ type: types.SET_EDITOR, payload })
 export const execute = () => ({ type: types.EXECUTE })
 
 // isEmpty :: String -> Either
-const isEmpty = code => (code ? Right(code) : Left('🥛 Empty: type something in...'))
+const isEmpty = code => code
+  ? Right(code)
+  : Left('🥛 Empty: type something in...')
 
 // safeStringify :: String -> Either
 const safeStringify = result =>
   encaseEither(() => '🚨 99 problems and your code is all of them')(r => stringify(r, null, 2))(result)
 
 // isObject :: Result -> Either
-const isObject = result => (result !== null && typeof result === 'object' ? safeStringify(result) : Right(result))
+const isObject = result => result !== null && typeof result === 'object'
+  ? safeStringify(result)
+  : Right(result)
 
 // isBool :: Result -> Either
-const isBool = result => (typeof result === 'boolean' ? Right(JSON.stringify(result)) : Right(result))
+const isBool = result => typeof result === 'boolean' 
+  ? Right(JSON.stringify(result))
+  : Right(result)
 
 // isFunction :: Result -> Either
-const isFunction = result => (typeof result === 'function' ? Right(result.toString()) : Right(result))
+const isFunction = result => typeof result === 'function'
+  ? Right(result.toString())
+  : Right(result)
 
 // isArray :: Result -> Either
-const isArray = result => (result.constructor === Array ? Right(JSON.stringify(result)) : Right(result))
+const isArray = result => result.constructor === Array
+  ? Right(JSON.stringify(result, null, 2))
+  : Right(result)
 
 // hasResult :: Result -> Either
-const hasResult = result => (result ? Right(result) : Left(result === undefined ? 'undefined' : result === null ? 'null' : 'VOID'))
+const hasResult = result => result
+  ? Right(result)
+  : Left(result === undefined ? 'undefined' : result === null ? 'null' : 'VOID')
 
 // withContext :: String -> Throwable String
 const withContext = code => evalInContext.call({ S, L, R, $, daggy, redux, code })

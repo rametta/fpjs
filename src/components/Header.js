@@ -11,17 +11,19 @@ const Flex = styled.div`
 const Link = styled.a`
   margin-right: 7px;
   text-decoration: none;
-  color: gray;
+  color: #6272a4;
   :hover {
     animation: zomg 3s infinite;
   }
 `
 
 const Palm = styled.h1`
-  margin-right: 0.5em;
+  margin-right: 0.25em;
+  margin-bottom: 0;
 `
 
 const Title = styled.h2`
+  color: #d8e2ff;
   margin-bottom: 0;
 `
 
@@ -29,6 +31,10 @@ const HeaderContainer = styled.header`
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  padding-bottom: 1em;
+  @media (max-width: 700px) {
+    padding-bottom: 0;
+  }
 `
 
 const Links = styled.small`
@@ -41,7 +47,7 @@ export const Header = () => (
     <Flex>
       <Palm>
         <span role="img" aria-label="palm emoji">
-          🌴
+          🔮
         </span>
       </Palm>
       <div>
@@ -92,7 +98,5 @@ export const Header = () => (
         </Links>
       </div>
     </Flex>
-
-    <small />
   </HeaderContainer>
 )

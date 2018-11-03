@@ -4,9 +4,8 @@ import styled from 'styled-components'
 const ErrorContainer = styled.div`
   max-height: 200px;
   overflow: auto;
-  margin-bottom: 1em;
-  border: 1px solid #ff8e8e;
-  background: #ffd8d8;
+  border: none;
+  background: #f44242;
 `
 
 const Pre = styled.pre`
@@ -17,8 +16,9 @@ const Pre = styled.pre`
 const Code = styled.code`
   color: #f92c59;
   overflow: auto;
-  border: 1px solid transparent;
-  background: #ffd8d8;
+  border: none;
+  background: #f44242;
+  color: white;
   border-radius: 0;
 `
 

@@ -4,9 +4,8 @@ import styled from 'styled-components'
 const ResultContainer = styled.div`
   max-height: 200px;
   overflow: auto;
-  margin-bottom: 1em;
-  background: #d8ffed;
-  border: 1px solid #8effe0;
+  background: #98a5f2;
+  border: none;
 `
 
 const Pre = styled.pre`
@@ -16,8 +15,8 @@ const Pre = styled.pre`
 
 const Code = styled.code`
   overflow: auto;
-  background: #d8ffed;
-  border: 1px solid transparent;
+  background: #98a5f2;
+  border: none;
   border-radius: 0;
 `
 

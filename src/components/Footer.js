@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 const FooterWrapper = styled.footer`
   display: flex;
@@ -8,12 +8,14 @@ const FooterWrapper = styled.footer`
 `
 
 const Gray = styled.span`
-  color: gray;
+  color: #f2f2f2;
 `
 
 const Button = styled.button`
   margin-left: 1em;
+  margin-top: 1em;
   overflow: hidden;
+  background: #98a5f2;
 `
 
 export const Footer = ({ exec }) => (
