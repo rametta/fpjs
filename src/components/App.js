@@ -48,7 +48,7 @@ class App extends Component {
   componentDidMount() {
     const { href } = window.location
     const index = href.indexOf('?script=')
-    either(I)((v) => this.props.setEditor(v))(validateUri(index)(href))
+    either(I)(this.props.setEditor)(validateUri(index)(href))
   }
 
   update(editorValue) {
