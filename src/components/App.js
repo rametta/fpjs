@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { create, env } from 'sanctuary'
+import { either, Left, Right, chain, I } from 'sanctuary'
 import styled from 'styled-components'
 
 import { Header } from './Header'
@@ -8,10 +8,9 @@ import { Footer } from './Footer'
 import { Result } from './Result'
 import { Error } from './Error'
 import { Editor } from './Editor'
+import { Sidebar } from './Sidebar'
 
-import { setEditor, execute } from './../app.redux'
-const S = create({ checkTypes: true, env })
-const { either, Left, Right, chain, I } = S
+import { setEditor, execute, toggleSidebar } from './../app.redux'
 
 // canPush :: String -> Either
 const canPush = (script) => {
@@ -65,10 +64,11 @@ class App extends Component {
   }
 
   render() {
-    const { status, editor } = this.props
+    const { status, editor, sidebar, toggleSidebar } = this.props
     return (
       <AppContainer>
-        <Header />
+        <Header toggleSidebar={toggleSidebar} />
+        {sidebar ? <Sidebar toggleSidebar={toggleSidebar} /> : null}
         <Content>
           <Editor
             ref={(c) => (this.editor = c)}
@@ -89,6 +89,6 @@ class App extends Component {
 }
 
 export default connect(
-  ({ editor, status }) => ({ editor, status }),
-  { setEditor, execute }
+  ({ editor, status, sidebar }) => ({ editor, status, sidebar }),
+  { setEditor, execute, toggleSidebar }
 )(App)

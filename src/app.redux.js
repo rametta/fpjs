@@ -1,15 +1,12 @@
 import * as redux from 'redux'
 import * as L from 'partial.lenses'
 import * as R from 'ramda'
-import Maybe from 'oncha/maybe'
-import Either from 'oncha/either'
 import daggy from 'daggy'
 import stringify from 'json-stringify'
 import * as $ from 'sanctuary-def'
 import { create, env } from 'sanctuary'
 const S = create({ checkTypes: true, env })
 const { unchecked } = S
-const O = { Maybe, Either }
 
 const Status = daggy.taggedSum('Status', {
   Success: ['result'],
@@ -20,11 +17,13 @@ const Status = daggy.taggedSum('Status', {
 const initial = {
   editor: `S.compose (Math.sqrt) (S.add (1)) (8)`,
   status: Status.Empty,
+  sidebar: false
 }
 
 // actions
 export const setEditor = payload => ({ type: 'SET_EDITOR', payload })
 export const execute = () => ({ type: 'EXECUTE' })
+export const toggleSidebar = () => ({ type: 'TOGGLE_SIDEBAR' })
 
 // isEmpty :: String -> Either
 const isEmpty = code => code
@@ -61,7 +60,7 @@ const hasResult = result => result
   : unchecked.Left(result === undefined ? 'undefined' : result === null ? 'null' : 'VOID')
 
 // withContext :: String -> Throwable String
-const withContext = code => evalInContext.call({ O, S, L, R, $, daggy, redux, code })
+const withContext = code => evalInContext.call({ S, L, R, $, daggy, redux, code })
 
 // tryEval :: String -> Either
 const tryEval = unchecked.encaseEither(e => console.error(e) || e.toString())(withContext)
@@ -76,7 +75,6 @@ function evalInContext() {
     const S = this.S
     const L = this.L
     const R = this.R
-    const O = this.O
     const redux = this.redux
     const daggy = this.daggy
     ${this.code}
@@ -95,6 +93,11 @@ export const reducer = (state = initial, { type, payload }) => {
         ...state,
         status: Status.Success(result),
       }))(run(state.editor))
+    case 'TOGGLE_SIDEBAR':
+      return {
+        ...state,
+        sidebar: !state.sidebar
+      }
     default:
       return state
   }

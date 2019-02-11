@@ -42,7 +42,19 @@ const Links = styled.small`
   flex-wrap: wrap;
 `
 
-export const Header = () => (
+const ExampleBtn = styled.button`
+  margin-left: 1em;
+  margin-top: 5px;
+  background: grey;
+  border: none;
+`
+
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+export const Header = ({ toggleSidebar }) => (
   <HeaderContainer className="u-full-width">
     <Flex>
       <Palm>
@@ -51,7 +63,11 @@ export const Header = () => (
         </span>
       </Palm>
       <div>
-        <Title>FPJS</Title>
+        <TitleContainer>
+          <Title>FPJS</Title>
+          <ExampleBtn type="button" onClick={() => toggleSidebar()}>Examples</ExampleBtn>
+        </TitleContainer>
+        
         <Links>
           <Link
             rel="noopener noreferrer"
