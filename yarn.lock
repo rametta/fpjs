@@ -6528,6 +6528,11 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
   dependencies:
     wrappy "1"
 
+oncha@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/oncha/-/oncha-0.0.22.tgz#660308070ae768e5a46b18c2974c6e342eb6ba08"
+  integrity sha1-ZgMIBwrnaOWkaxjCl0xuNC62ugg=
+
 onetime@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/onetime/-/onetime-2.0.1.tgz#067428230fd67443b2794b22bba528b6867962d4"

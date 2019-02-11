@@ -1,12 +1,13 @@
 {
-  "name": "sanctuary-sandbox",
-  "description": "Playground for testing Sanctuary JS snippets",
+  "name": "fpjs",
+  "description": "Playground for testing FP JS snippets",
   "author": "Jason Rametta <rametta@outlook.com>",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "daggy": "^1.3.0",
     "json-stringify": "^1.0.0",
+    "oncha": "^0.0.22",
     "partial.lenses": "^13.16.0",
     "ramda": "^0.25.0",
     "react": "^16.6.0",
@@ -20,11 +21,11 @@
     "styled-components": "^4.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && surge -d sanctuaryjs.surge.sh -p build"
+    "deploy": "yarn build && surge -d fpjs.surge.sh -p build"
   },
   "browserslist": [
     ">0.2%",

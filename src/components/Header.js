@@ -51,7 +51,7 @@ export const Header = () => (
         </span>
       </Palm>
       <div>
-        <Title>Sanctuary Sandbox</Title>
+        <Title>FPJS</Title>
         <Links>
           <Link
             rel="noopener noreferrer"
@@ -91,7 +91,7 @@ export const Header = () => (
           <Link
             rel="noopener noreferrer"
             target="_blank"
-            href="https://github.com/rametta/sanctuary-sandbox"
+            href="https://rametta.org"
           >
             Rametta
           </Link>

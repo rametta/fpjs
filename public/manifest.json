@@ -1,7 +1,7 @@
 {
-  "short_name": "🌴 Sanctuary",
-  "name": "Sanctuary Sandbox",
-  "description": "All things FP",
+  "short_name": "🌴 FPJS",
+  "name": "🌴 FPJS",
+  "description": "All things FP & JS",
   "icons": [
     {
       "src": "favicon.ico",

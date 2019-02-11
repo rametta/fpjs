@@ -1,8 +1,8 @@
-# Sanctuary Sandbox
+# FPJS
 
 ## How to
 
-This app is a sandbox for playing with `Sanctuary`, `Daggy`, `Partial.Lense`, and `Ramda`
+This app is a sandbox for playing with `Sanctuary`, `Daggy`, `redux`, `Partial.Lense`, and `Ramda`
 
 - Sanctuary import example: `const { compose, either } = S`
 - Partial.Lenses import example: `const { prop, get, set } = L`
