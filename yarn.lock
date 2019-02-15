@@ -6544,6 +6544,11 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.2, postcss@^7.0.5:
     source-map "^0.6.1"
     supports-color "^5.5.0"
 
+pratica@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/pratica/-/pratica-1.2.1.tgz#5d26cc141cb3daaf10805ac0ffe9912174cec0f7"
+  integrity sha512-XXhkW9NzIYq/RqZ9dbxNguNtET1L34ae3iPVsV6tsA3WDASoJIa9j8hyOFUzEUNUrQxmXLv9++a/QUxq2VMbfQ==
+
 prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"

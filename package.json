@@ -8,6 +8,7 @@
     "daggy": "^1.3.0",
     "json-stringify": "^1.0.0",
     "partial.lenses": "^13.16.0",
+    "pratica": "^1.2.1",
     "ramda": "^0.25.0",
     "react": "^16.6.0",
     "react-ace": "^6.2.0",

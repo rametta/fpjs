@@ -3,6 +3,10 @@ import styled from 'styled-components'
 
 const examples = [
   {
+    display: 'Pratica Maybe',
+    link: '/?script=const%20%7B%20Maybe%20%7D%20%3D%20P%0A%0Aconst%20person%20%3D%20%7B%20name%3A%20%27Jason%27%2C%20age%3A%208%20%20%7D%0A%0AMaybe(person)%0A%20%20.chain(p%20%3D>%20Maybe(p.name))%0A%20%20.cata(%7B%0A%20%20%20%20Just%3A%20name%20%3D>%20%27Hello%20my%20name%20is%20%27%20%2B%20name%2C%0A%20%20%20%20Nothing%3A%20()%20%3D>%20%27No%20name%27%0A%20%20%7D)',
+  },
+  {
     display: 'Sanctuary Compose',
     link: '/?script=S.compose%20(Math.sqrt)%20(S.add%20(1))%20(8)',
   },

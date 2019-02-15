@@ -72,6 +72,13 @@ export const Header = ({ toggleSidebar }) => (
           <Link
             rel="noopener noreferrer"
             target="_blank"
+            href="https://github.com/rametta/pratica"
+          >
+            Pratica
+          </Link>
+          <Link
+            rel="noopener noreferrer"
+            target="_blank"
             href="https://sanctuary.js.org"
           >
             Sanctuary
