@@ -18,7 +18,6 @@ export class Editor extends Component {
           ref={(c) => (this.reactAceEditor = c)}
           height="100%"
           width="100%"
-          name="EDITOR"
           theme="dracula"
           mode="javascript"
           value={this.props.value}

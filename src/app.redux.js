@@ -88,7 +88,6 @@ export const reducer = (state = initial, { type, payload }) => {
         editor: payload,
       }
     case 'EXECUTE':
-
       return {
         ...state,
         status: run(state.editor).cata({

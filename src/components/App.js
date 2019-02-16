@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { either, Left, Right, chain, I } from 'sanctuary'
+import { Maybe, Nothing } from 'pratica'
 import styled from 'styled-components'
 
 import { Header } from './Header'
@@ -12,23 +12,17 @@ import { Sidebar } from './Sidebar'
 
 import { setEditor, execute, toggleSidebar } from './../app.redux'
 
-// canPush :: String -> Either
+// canPush :: String -> Maybe
 const canPush = (script) => {
   const { protocol, host, pathname } = window.location
-  return window.history.pushState
-    ? Right(`${protocol}//${host}${pathname}?script=${script}`)
-    : Left(I)
+  return Maybe(window.history.pushState)
+    .map(() => `${protocol}//${host}${pathname}?script=${script}`)
 }
 
-// hasScript :: String -> Either
-const hasScript = (script) => (script ? Right(script) : Left(I))
-
-// valid :: Number -> String -> Either
-const valid = (index) => (href) =>
-  index > -1 ? Right(decodeURIComponent(href.substr(index + 8))) : Left(I)
-
-// validateUri :: Number -> String -> Either
-const validateUri = (index) => (href) => chain(hasScript)(valid(index)(href))
+// valid :: Number -> String -> Maybe
+const valid = index => href => index > -1
+  ? Maybe(decodeURIComponent(href.substr(index + 8)))
+  : Nothing
 
 const AppContainer = styled.div`
   height: 100%;
@@ -47,20 +41,29 @@ class App extends Component {
   componentDidMount() {
     const { href } = window.location
     const index = href.indexOf('?script=')
-    either(I)(this.props.setEditor)(validateUri(index)(href))
+    valid(index)(href).cata({
+      Just: this.props.setEditor,
+      Nothing: () => null
+    })
+    this.resize()
   }
 
   update(editorValue) {
     this.props.setEditor(editorValue)
     const script = encodeURIComponent(editorValue)
-    either(I)((uri) => window.history.pushState({ path: uri }, '', uri))(
-      canPush(script)
-    )
+    canPush(script).cata({
+      Just: uri => window.history.pushState({ path: uri }, '', uri),
+      Nothing: () => null
+    })
   }
 
   execute() {
     this.props.execute()
-    setTimeout(() => this.editor.reactAceEditor.editor.resize(), 200)
+    this.resize()
+  }
+
+  resize() {
+    setTimeout(() => this.editor.reactAceEditor.editor.resize(), 100)
   }
 
   render() {
