@@ -6,6 +6,7 @@ This app is a sandbox for playing with:
 - [Daggy](https://github.com/fantasyland/daggy)
 - [Partial.Lenses](https://github.com/calmm-js/partial.lenses)
 - [Ramda](https://ramdajs.com/docs/)
+- [Lodash](https://lodash.com/docs)
 - [Redux](https://redux.js.org/api/api-reference)
 
 ## Import examples
@@ -14,3 +15,4 @@ This app is a sandbox for playing with:
 - Partial.Lenses `const { prop, get, set } = L`
 - Ramda `const { pipe } = R`
 - Daggy `const { taggedSum } = daggy`
+- Lodash `const { isArray } = _`

@@ -114,6 +114,13 @@ export const Header = ({ toggleSidebar }) => (
           <Link
             rel="noopener noreferrer"
             target="_blank"
+            href="https://lodash.com/docs"
+          >
+            Lodash
+          </Link>
+          <Link
+            rel="noopener noreferrer"
+            target="_blank"
             href="https://rametta.org"
           >
             Rametta

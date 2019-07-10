@@ -2,6 +2,7 @@ import * as redux from 'redux'
 import * as L from 'partial.lenses'
 import * as R from 'ramda'
 import * as P from 'pratica'
+import * as _ from 'lodash'
 import daggy from 'daggy'
 import stringify from 'json-stringify'
 import * as $ from 'sanctuary-def'
@@ -51,7 +52,7 @@ const hasResult = result => P.Maybe(result).cata({
 })
 
 // withContext :: String -> Throwable String
-const withContext = code => evalInContext.call({ S, L, R, P, $, daggy, redux, code })
+const withContext = code => evalInContext.call({ S, L, R, P, $, _, daggy, redux, code })
 
 // tryEval :: String -> Result
 const tryEval = code => P.encaseRes(() => withContext(code))
@@ -74,6 +75,7 @@ function evalInContext() {
     const L = this.L
     const R = this.R
     const P = this.P
+    const _ = this._
     const redux = this.redux
     const daggy = this.daggy
     ${this.code}
