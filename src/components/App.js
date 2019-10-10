@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Maybe, Nothing } from 'pratica'
+import { nullable, Nothing } from 'pratica'
 import styled from 'styled-components'
 
 import { Header } from './Header'
@@ -15,13 +15,13 @@ import { setEditor, execute, toggleSidebar } from './../app.redux'
 // canPush :: String -> Maybe
 const canPush = (script) => {
   const { protocol, host, pathname } = window.location
-  return Maybe(window.history.pushState)
+  return nullable(window.history.pushState)
     .map(() => `${protocol}//${host}${pathname}?script=${script}`)
 }
 
 // valid :: Number -> String -> Maybe
 const valid = index => href => index > -1
-  ? Maybe(decodeURIComponent(href.substr(index + 8)))
+  ? nullable(decodeURIComponent(href.substr(index + 8)))
   : Nothing
 
 const AppContainer = styled.div`

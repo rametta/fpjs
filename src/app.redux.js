@@ -3,6 +3,7 @@ import * as L from 'partial.lenses'
 import * as R from 'ramda'
 import * as P from 'pratica'
 import * as _ from 'lodash'
+import * as X from '@xstate/fsm'
 import daggy from 'daggy'
 import stringify from 'json-stringify'
 import * as $ from 'sanctuary-def'
@@ -46,13 +47,13 @@ const safeStringify = result => isString(result)
      .mapErr(() => console.log(result) || 'Could not stringify result')
 
 // hasResult :: String -> Result
-const hasResult = result => P.Maybe(result).cata({
+const hasResult = result => P.nullable(result).cata({
   Just: P.Ok,
   Nothing: () => P.Err(result === undefined ? 'undefined' : result === null ? 'null' : 'VOID')
 })
 
 // withContext :: String -> Throwable String
-const withContext = code => evalInContext.call({ S, L, R, P, $, _, daggy, redux, code })
+const withContext = code => evalInContext.call({ S, L, R, P, X, $, _, daggy, redux, code })
 
 // tryEval :: String -> Result
 const tryEval = code => P.encaseRes(() => withContext(code))
@@ -75,6 +76,7 @@ function evalInContext() {
     const L = this.L
     const R = this.R
     const P = this.P
+    const X = this.X
     const _ = this._
     const redux = this.redux
     const daggy = this.daggy

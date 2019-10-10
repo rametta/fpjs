@@ -1109,6 +1109,11 @@
     "@webassemblyjs/wast-parser" "1.7.11"
     "@xtuc/long" "4.2.1"
 
+"@xstate/fsm@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@xstate/fsm/-/fsm-1.0.1.tgz#153d86c6ce246d77bffb67e51875e2985609f6c2"
+  integrity sha512-ZURJOXlLLSWQ73X6tw6igURSHQWQUGOR24T+86uHWiLlr9aPldyNMrwj8qno2KSHtmJT4Y2QMPbuH62hSrbYmg==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -5956,6 +5961,11 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
+lodash@^4.17.13:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+
 loglevel@^1.4.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
@@ -7689,10 +7699,10 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.5,
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-pratica@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/pratica/-/pratica-1.4.1.tgz#a24331ea7ab3374f150a1051e1eca230e2d2d2bf"
-  integrity sha512-TV1TQNLdXgfQ9TX8PQpMaEcMkYEw1EgZ5aNC5qvAjR/UXh7eA/lKVhALou2Tm+nISsJiW45xecWa74EJnulnGA==
+pratica@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/pratica/-/pratica-2.0.0.tgz#834ebe8a0f837aacbbdbc161810541264874fd0e"
+  integrity sha512-nkCIuzIlOeysK2VrXjFTg9H7UPF9t3ptdGTsfq3rVicPjKc2c3iIcrT4hBSz6P1Yd6xoXsGnJoyc6rdQd0ZfAA==
 
 prelude-ls@~1.1.2:
   version "1.1.2"

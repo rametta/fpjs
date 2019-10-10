@@ -5,11 +5,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@xstate/fsm": "^1.0.1",
     "daggy": "^1.4.0",
     "json-stringify": "^1.0.0",
     "lodash": "^4.17.13",
     "partial.lenses": "^14.17.0",
-    "pratica": "^1.4.1",
+    "pratica": "^2.0.0",
     "ramda": "^0.26.1",
     "react": "^16.8.2",
     "react-ace": "^6.4.0",
