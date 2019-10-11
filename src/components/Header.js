@@ -107,9 +107,9 @@ export const Header = ({ toggleSidebar }) => (
           <Link
             rel="noopener noreferrer"
             target="_blank"
-            href="https://github.com/davidkpiano/xstate/tree/master/packages/xstate-fsm"
+            href="https://xstate.js.org/docs/"
           >
-            @xstate/fsm
+            XState
           </Link>
           <Link
             rel="noopener noreferrer"

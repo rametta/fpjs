@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@xstate/fsm": "^1.0.1",
+    "@xstate/react": "^0.7.1",
     "daggy": "^1.4.0",
     "json-stringify": "^1.0.0",
     "lodash": "^4.17.13",
@@ -18,7 +18,8 @@
     "react-scripts": "^3.2.0",
     "sanctuary": "^0.15.0",
     "sanctuary-def": "^0.18.1",
-    "styled-components": "^4.4.0"
+    "styled-components": "^4.4.0",
+    "xstate": "^4.6.7"
   },
   "scripts": {
     "dev": "react-scripts start",

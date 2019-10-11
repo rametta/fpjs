@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect, useRef } from 'react'
+import { useMachine } from '@xstate/react'
 import styled from 'styled-components'
 import AceEditor from 'react-ace'
 import 'brace/mode/javascript'
@@ -9,7 +10,7 @@ import * as L from 'partial.lenses'
 import * as R from 'ramda'
 import * as P from 'pratica'
 import * as _ from 'lodash'
-import * as X from '@xstate/fsm'
+import * as X from 'xstate'
 import daggy from 'daggy'
 import stringify from 'json-stringify'
 import * as $ from 'sanctuary-def'
@@ -53,9 +54,11 @@ const canPush = script => {
     .map(() => `${protocol}//${host}${pathname}?script=${script}`)
 }
 
-const valid = index => href => index > -1
-  ? P.nullable(decodeURIComponent(href.substr(index + 8)))
-  : P.Nothing
+const valid = href => P
+  .nullable(href)
+  .map(h => h.indexOf('?script='))
+  .chain(index => index > 1 ? P.Just(index) : P.Nothing)
+  .chain(index => P.nullable(decodeURIComponent(href.substr(index + 8))))
 
 const isEmpty = code => code
   ? P.Ok(code)
@@ -119,38 +122,39 @@ const reducer = (state, { type, payload }) => {
           Err: msg => Status.Error(msg)
         })
       }
-    case 'TOGGLE_SIDEBAR':
-      return {
-        ...state,
-        sidebar: !state.sidebar
-      }
     default:
       return state
   }
 }
 
+const sidebarMachine = X.Machine({
+  id: 'sidebar',
+  initial: 'inactive',
+  states: {
+    inactive: { on: { TOGGLE: 'active' } },
+    active: { on: { TOGGLE: 'inactive' } }
+  }
+})
+
 const App = () => {
   const editorRef = useRef(null)
+  const [sidebar, sendSidebar] = useMachine(sidebarMachine);
 
-  const [{ content, status, sidebar }, dispatch] = useReducer(reducer, {
+  const [{ content, status }, dispatch] = useReducer(reducer, {
     content: 'S.compose (Math.sqrt) (S.add (1)) (8)',
-    status: Status.Empty,
-    sidebar: false
+    status: Status.Empty
   })
 
   useEffect(() => {
-    const { href } = window.location
-    const index = href.indexOf('?script=')
-
-    valid(index)(href).cata({
-      Just: c => dispatch({ type: 'SET_CONTENT', payload: c }),
-      Nothing: () => null
-    })
+    valid(window.location.href)
+      .cata({
+        Just: c => dispatch({ type: 'SET_CONTENT', payload: c }),
+        Nothing: () => null
+      })
   }, [])
 
   useEffect(() => {
-    const script = encodeURIComponent(content)
-    canPush(script).cata({
+    canPush(encodeURIComponent(content)).cata({
       Just: uri => window.history.pushState({ path: uri }, '', uri),
       Nothing: () => null
     })
@@ -162,8 +166,8 @@ const App = () => {
 
   return (
     <AppContainer>
-      <Header toggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })} />
-      {sidebar && <Sidebar toggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })} />}
+      <Header toggleSidebar={() => sendSidebar('TOGGLE')} />
+      {sidebar.value === 'active' && <Sidebar toggleSidebar={() => sendSidebar('TOGGLE')} />}
       <Content>
         <AceContainer className="u-full-width">
           <AceEditor
