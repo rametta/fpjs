@@ -10,17 +10,15 @@
     "json-stringify": "^1.0.0",
     "lodash": "^4.17.13",
     "partial.lenses": "^14.17.0",
-    "pratica": "^2.0.0",
+    "pratica": "^2.0.2",
     "ramda": "^0.26.1",
-    "react": "^16.8.2",
+    "react": "^16.10.2",
     "react-ace": "^6.4.0",
-    "react-dom": "^16.8.2",
-    "react-redux": "^6.0.0",
-    "react-scripts": "^2.0.5",
-    "redux": "^4.0.1",
+    "react-dom": "^16.10.2",
+    "react-scripts": "^3.2.0",
     "sanctuary": "^0.15.0",
     "sanctuary-def": "^0.18.1",
-    "styled-components": "^4.1.3"
+    "styled-components": "^4.4.0"
   },
   "scripts": {
     "dev": "react-scripts start",

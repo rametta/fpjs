@@ -8,7 +8,6 @@ This app is a sandbox for playing with:
 - [Ramda](https://ramdajs.com/docs/)
 - [@xstate/fsm](https://github.com/davidkpiano/xstate/tree/master/packages/xstate-fsm)
 - [Lodash](https://lodash.com/docs)
-- [Redux](https://redux.js.org/api/api-reference)
 
 ## Import examples
 - Pratica `const { nullable } = P`
